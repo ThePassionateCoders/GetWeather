@@ -510,7 +510,11 @@ class DefaultCity():
     "UVIndex": "",
     "Visibility": "",
     "Pressure": "",
-    "Precipitation": ""
+    "Precipitation": "",
+    "SunRise": "",
+    "SunSet": "",
+    "MoonRise": "",
+    "MoonSet": ""
   }
 
 class ConfirmCity(ThreeLineAvatarIconListItem):
@@ -546,7 +550,7 @@ class GetWeather(MDApp):
 				
 		else:
 			self.searched_cities = self.call_api(f"http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey={self.api_key}&q={searched_text}")
-			
+
 			list_cities = []
 			for i in range(len(self.searched_cities)):
 				list_cities.append(

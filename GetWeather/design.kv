@@ -16,7 +16,7 @@
 		icon: "magnify"
 		theme_text_color: "Custom"
 		text_color: search_textbar.line_color_focus if search_textbar.focus else search_textbar.line_color_normal
-		ripple_scale: 0 if len(search_textbar.text)==0 else 2
+		ripple_scale: 2
 		pos_hint: {"center_x": .5, "center_y": .5}
 		on_release: 
 			app.searched(search_textbar.text)
@@ -36,6 +36,15 @@
 <MyMDLabel@MDLabel>
 	halign: "center"
 	padding: (10, 10)
+
+<MyImage@AsyncImage>
+	canvas.before:
+		Color:
+			rgba: (209/255, 220/255, 222/255, 1)
+  
+		Rectangle:
+			pos: self.pos
+			size: self.size
 
 MDScreen:
 	id: app_screen
@@ -99,25 +108,19 @@ MDScreen:
 									id: current_weather_text
 									text: "Heavy rain"
 									md_bg_color: app.theme_cls.primary_color
-									halign: "center"
-									pos_hint: {"top": 1}
-									size_hint: (1, .3)
+									size_hint: (1, None)
+									height: dp(50)
 
 								MDBoxLayout:
-									size_hint: (1, .7)
-									pos_hint:  {"bottom": 0}
 
 									AsyncImage:
 										id: current_weather_icon
 										source: "https://developer.accuweather.com/sites/default/files/01-s.png"
-										pos_hint: {"bottom": 0}
 
 									MyMDLabel:
 										id: current_temp
 										text: "37 \u00B0C"
 										font_size: dp(30) if app_screen.width > dp(250) else dp(25)
-										halign: "center"
-
 
 						MDCard:
 							size_hint: (1, None)
@@ -127,7 +130,6 @@ MDScreen:
 
 							MDGridLayout:
 								cols: 2 if app_screen.width > dp(270) else 1
-								positon_hint:{"top": 1}
 								size: root.size
 
 								MyMDLabel: 
@@ -147,6 +149,22 @@ MDScreen:
 								MyMDLabel:
 									id: current_real_feel_temp
 									text: "37 \u00B0C"
+																		
+								MyMDLabel:
+									text: "Dew Point"
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									
+								MyMDLabel:
+									id: current_dew_point
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "34 %"
+									
+								MyMDLabel:
+									text: "Cloud Cover"
+									
+								MyMDLabel:
+									id: current_cloud_cover
+									text: "30 %"
 																		
 								MyMDLabel:
 									text: "Humidity"
@@ -214,13 +232,329 @@ MDScreen:
 
 						MDCard:
 							size_hint: (1, None)
-							md_bg_color: (0,0,1,1)
-							height: main_screen.height//3
+							height: dp(270)
+							elevation: 10
+							radius: 20
+
+							MDGridLayout:
+								cols: 2 if app_screen.width > dp(275) else 1
+								size: root.size
+
+								MyMDLabel: 
+									md_bg_color: app.theme_cls.primary_color
+									text: "Timmings"
+									halign: "left"
+									size_hint_y: None
+									height: dp(50)	if app_screen.width > dp(275) else dp(25)
+
+								MyMDLabel:
+									id: current_date 
+									md_bg_color: app.theme_cls.primary_color
+									text: "22/22/22"
+									halign: "right"
+									size_hint_y: None
+									height: dp(50)	if app_screen.width > dp(275) else dp(25)			
+
+								AsyncImage:
+									source: "https://developer.accuweather.com/sites/default/files/01-s.png"
+
+								MyMDLabel:
+									id: sun
+									text: "Rise:00:00:00\nSet:00:00:00\n(+5:30)"
+
+								AsyncImage:
+									source: "https://developer.accuweather.com/sites/default/files/33-s.png"
+
+								MyMDLabel:
+									id: moon
+									text: "Rise:00:00:00\nSet:00:00:00\n(+5:30)"
 
 						MDCard:
 							size_hint: (1, None)
-							md_bg_color: (1,0,0,1)
-							height: main_screen.height//3
+							height: dp(400)
+							elevation: 10
+							radius: 20
+
+							MDGridLayout:
+								cols: 1
+								size: root.size
+
+								MDGridLayout:
+									cols: 2 if app_screen.width > dp(270) else 1
+									size_hint_y: None 
+									height: dp(50)
+
+									MyMDLabel: 
+										md_bg_color: app.theme_cls.primary_color
+										text: "Forecast"
+										halign: "left"
+
+									MyMDLabel:
+										id: forecast_date
+										md_bg_color: app.theme_cls.primary_color
+										text: "DateTime"
+										halign: "right"
+
+								MyMDLabel:		
+									id: forecast_weather_text
+									text: "Hazy Clouds"
+									md_bg_color: app.theme_cls.primary_light
+									size_hint_y: None
+									height: dp(50)
+
+								MDGridLayout:
+									cols: 2 if app_screen.width > dp(270) else 1
+									size_hint_y: None 
+									height: dp(300)
+
+									MyMDLabel:
+										text: "Minimum Temperature"
+
+									MyMDLabel:
+										id: forecast_min_temp
+										text: "37 \u00B0C"
+																			
+									MyMDLabel:
+										text: "Maximum Temperature"
+										md_bg_color: (209/255, 220/255, 222/255, 1)
+										
+									MyMDLabel:
+										id: forecast_max_temp
+										md_bg_color: (209/255, 220/255, 222/255, 1)
+										text: "34 %"
+										
+									MyMDLabel:
+										text: "Minimum Real Feel"
+										
+									MyMDLabel:
+										id: forecast_min_real_feel
+										text: "30 %"
+										
+									MyMDLabel:
+										md_bg_color: (209/255, 220/255, 222/255, 1)
+										text: "Maximum Real Feel"
+										
+									MyMDLabel:
+										id: forecast_max_real_feel
+										md_bg_color: (209/255, 220/255, 222/255, 1)
+										text: "NNW 34 km/hr"
+																				
+									MyMDLabel:
+										text: "Hours of Sun"
+										
+									MyMDLabel:
+										id: forecast_hrs_of_sun
+										text: "6.4"
+
+									MyMDLabel:
+										md_bg_color: (209/255, 220/255, 222/255, 1)
+										text: "Air Quality"
+										
+									MyMDLabel:
+										id: forecast_air_quality
+										md_bg_color: (209/255, 220/255, 222/255, 1)
+										text: "45 km/hr"
+
+									MyMDLabel:
+										text: "UV Index"
+										
+									MyMDLabel:
+										id: forecast_uv_index
+										text: "NNW 34 km/hr"
+
+						MDCard:
+							size_hint: (1, None)
+							height: dp(500)
+							elevation: 10
+							radius: 20
+
+							MDGridLayout:
+								cols: 2 if app_screen.width > dp(275) else 1
+								size: root.size
+
+								MyMDLabel: 
+									md_bg_color: app.theme_cls.primary_color
+									text: "Day Forecast"
+									halign: "left"
+
+								MyMDLabel:
+									id: day_forecast_date
+									md_bg_color: app.theme_cls.primary_color
+									text: "DateTime"
+									halign: "right"
+
+								AsyncImage:
+									id: day_forecast_icon
+									source: "https://developer.accuweather.com/sites/default/files/01-s.png"
+
+								MyMDLabel:
+									id: day_forecast_text
+									text: "Heay clouds"
+
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Precipitation Probability"
+
+								MyMDLabel:
+									id: day_forecast_precp_prob
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "37 \u00B0C"
+																		
+								MyMDLabel:
+									text: "Thunderstorm Probability"
+									
+								MyMDLabel:
+									id: day_forecast_thunder_prob
+									text: "34 %"
+									
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Rain Probability"
+									
+								MyMDLabel:
+									id: day_forecast_rain_prob
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "30 %"
+									
+								MyMDLabel:
+									text: "Snow Probability"
+									
+								MyMDLabel:
+									id: day_forecast_snow_prob
+									text: "NNW 34 km/hr"
+									
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Ice Probability"
+									
+								MyMDLabel:
+									id: day_forecast_ice_prob
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "45 km/hr"
+
+								MyMDLabel:
+									text: "Cloud Cover"
+									
+								MyMDLabel:
+									id: day_forecast_cloud_cover
+									text: "30 %"
+
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Wind"
+									
+								MyMDLabel:
+									id: day_forecast_wind
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "NNW 34 km/hr"
+									
+								MyMDLabel:
+									text: "Wind Gust"
+									
+								MyMDLabel:
+									id: day_forecast_wind_gust
+									text: "45 km/hr"
+								
+						MDCard:
+							size_hint: (1, None)
+							height: dp(500)
+							elevation: 10
+							radius: 20
+
+							MDGridLayout:
+								cols: 2 if app_screen.width > dp(275) else 1
+								size: root.size
+
+								MyMDLabel: 
+									md_bg_color: app.theme_cls.primary_color
+									text: "Night Forecast"
+									halign: "left"
+
+								MyMDLabel:
+									id: night_forecast_date
+									md_bg_color: app.theme_cls.primary_color
+									text: "DateTime"
+									halign: "right"
+
+								AsyncImage:
+									id: night_forecast_icon
+									source: "https://developer.accuweather.com/sites/default/files/01-s.png"
+
+								MyMDLabel:
+									id: night_forecast_text
+									text: "Heay clouds"
+
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Precipitation Probability"
+
+								MyMDLabel:
+									id: night_forecast_precp_prob
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "37 \u00B0C"
+																		
+								MyMDLabel:
+									text: "Thunderstorm Probability"
+									
+								MyMDLabel:
+									id: night_forecast_thunder_prob
+									text: "34 %"
+									
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Rain Probability"
+									
+								MyMDLabel:
+									id: night_forecast_rain_prob
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "30 %"
+									
+								MyMDLabel:
+									text: "Snow Probability"
+									
+								MyMDLabel:
+									id: night_forecast_snow_prob
+									text: "NNW 34 km/hr"
+									
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Ice Probability"
+									
+								MyMDLabel:
+									id: night_forecast_ice_prob
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "45 km/hr"
+
+								MyMDLabel:
+									text: "Cloud Cover"
+									
+								MyMDLabel:
+									id: night_forecast_cloud_cover
+									text: "30 %"
+
+								MyMDLabel:
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "Wind"
+									
+								MyMDLabel:
+									id: night_forecast_wind
+									md_bg_color: (209/255, 220/255, 222/255, 1)
+									text: "NNW 34 km/hr"
+									
+								MyMDLabel:
+									text: "Wind Gust"
+									
+								MyMDLabel:
+									id: night_forecast_wind_gust
+									text: "45 km/hr"
+
+
+
+
+
+
+
+
 
 		MDNavigationDrawer:
 			id: nav_drawer
