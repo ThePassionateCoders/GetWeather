@@ -1,0 +1,103 @@
+[
+
+	{
+		'Version': 1, 
+		'Key': '202396', 
+		'Type': 'City', 
+		'Rank': 11, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'IN', 'LocalizedName': 'India'}, 
+		'AdministrativeArea': {'ID': 'DL', 'LocalizedName': 'Delhi'}
+	},
+
+	{
+		'Version': 1, 
+		'Key': '65329', 
+		'Type': 'City', 
+		'Rank': 45, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'CN', 'LocalizedName': 'China'}, 
+		'AdministrativeArea': {'ID': 'QH', 'LocalizedName': 'Qinghai'}
+	},
+
+	{
+		'Version': 1, 
+		'Key': '893482', 
+		'Type': 'City', 
+		'Rank': 45, 
+		'LocalizedName': 'Delhi Cantonment', 
+		'Country': {'ID': 'IN', 'LocalizedName': 'India'}, 
+		'AdministrativeArea': {'ID': 'DL', 'LocalizedName': 'Delhi'}
+	},
+
+	{
+		'Version': 1, 
+		'Key': '2155308', 
+		'Type': 'City', 
+		'Rank': 65, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'US', 'LocalizedName': 'United States'}, 
+		'AdministrativeArea': {'ID': 'CA', 'LocalizedName': 'California'}
+	}, 
+
+	{
+		'Version': 1, 
+		'Key': '1122380', 
+		'Type': 'City', 
+		'Rank': 75, 
+		'LocalizedName': 'Delhi Settlement', 
+		'Country': {'ID': 'TT', 'LocalizedName': 'Trinidad and Tobago'}, 
+		'AdministrativeArea': {'ID': 'SIP', 'LocalizedName': 'Siparia'}
+	},
+
+	{
+		'Version': 1, 
+		'Key': '2190984', 
+		'Type': 'City', 
+		'Rank': 75, 
+		'LocalizedName': 'Delhi Hills', 
+		'Country': {'ID': 'US', 'LocalizedName': 'United States'}, 
+		'AdministrativeArea': {'ID': 'OH', 'LocalizedName': 'Ohio'}
+	}, 
+
+	{
+		'Version': 1, 
+		'Key': '2204223', 
+		'Type': 'City', 
+		'Rank': 85, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'US', 'LocalizedName': 'United States'}, 
+		'AdministrativeArea': {'ID': 'IA', 'LocalizedName': 'Iowa'}
+	},
+
+	{
+		'Version': 1, 
+		'Key': '333472', 
+		'Type': 'City', 
+		'Rank': 85, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'US', 'LocalizedName': 'United States'}, 
+		'AdministrativeArea': {'ID': 'LA', 'LocalizedName': 'Louisiana'}
+	}, 
+
+	{
+		'Version': 1, 
+		'Key': '2247464', 
+		'Type': 'City', 
+		'Rank': 85, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'US', 'LocalizedName': 'United States'}, 
+		'AdministrativeArea': {'ID': 'MN', 'LocalizedName': 'Minnesota'}
+	}, 
+
+	{
+		'Version': 1, 
+		'Key': '334629', 
+		'Type': 'City', 
+		'Rank': 85, 
+		'LocalizedName': 'Delhi', 
+		'Country': {'ID': 'US', 'LocalizedName': 'United States'}, 
+		'AdministrativeArea': {'ID': 'NY', 'LocalizedName': 'New York'}
+	}
+
+]
