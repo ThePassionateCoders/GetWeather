@@ -1,3 +1,7 @@
+#:import Clock kivy.clock.Clock
+#:import partial functools.partial
+#:import toast kivymd.toast.toast
+
 <SearchToolbar@MDBoxLayout>
 
 	Widget:
@@ -9,7 +13,9 @@
 		hint_text: "Enter your city"
 		pos_hint: {"center_x": .5, "center_y": .5}
 		size_hint_x: .7
-		on_text_validate: app.searched(search_textbar.text)
+		on_text_validate: 
+			toast("Searching...")
+			Clock.schedule_once(partial(app.searched,search_textbar.text), 1)
 
 	MDIconButton:
 		id: search_button
@@ -19,7 +25,8 @@
 		ripple_scale: 2
 		pos_hint: {"center_x": .5, "center_y": .5}
 		on_release: 
-			app.searched(search_textbar.text)
+			toast("Searching...")
+			Clock.schedule_once(partial(app.searched,search_textbar.text), 1)
 
 	Widget:
 		size_hint_x: .15
@@ -37,10 +44,10 @@
 	halign: "center"
 	padding: (10, 10)
 
-<MyImage@AsyncImage>
+<MyImage@Image>
 	canvas.before:
 		Color:
-			rgba: (209/255, 220/255, 222/255, 1)
+			rgba: app.theme_cls.primary_color
   
 		Rectangle:
 			pos: self.pos
@@ -54,6 +61,7 @@ MDScreen:
 		pos_hint: {"top": 1}
 		title: "GET WEATHER"
 		left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]] 
+		right_action_items: [["refresh", lambda x: Clock.schedule_once(app.update_main_screen_data, 1)]] 
 
 	SearchToolbar:
 		id: search_toolbar
@@ -91,7 +99,6 @@ MDScreen:
 							size_hint: (1, None)
 							adaptive_height: True
 							markup: True
-							text: f"{app.selected_city.text}, {app.selected_city.secondary_text}"
 							font_size: dp(30)
 							padding: (10, 0)
 
@@ -99,14 +106,12 @@ MDScreen:
 							size_hint: (1, None)
 							height: dp(120)
 							elevation: 10
-							radius: 20
 
 							MDGridLayout:
 								cols: 1
 
 								MyMDLabel:
 									id: current_weather_text
-									text: app.selected_city.current['WeatherText']
 									md_bg_color: app.theme_cls.primary_color
 									size_hint: (1, None)
 									height: dp(50)
@@ -115,18 +120,15 @@ MDScreen:
 
 									AsyncImage:
 										id: current_weather_icon
-										source: f"https://developer.accuweather.com/sites/default/files/{app.selected_city.current['WeatherIcon']}-s.png"
 
 									MyMDLabel:
 										id: current_temp
-										text: f"{app.selected_city.current['Temperature']} \u00B0C"
 										font_size: dp(30) if app_screen.width > dp(250) else dp(25)
 
 						MDCard:
 							size_hint: (1, None)
 							height: dp(500)
 							elevation: 10
-							radius: 20
 
 							MDGridLayout:
 								cols: 2 if app_screen.width > dp(270) else 1
@@ -134,13 +136,12 @@ MDScreen:
 
 								MyMDLabel: 
 									md_bg_color: app.theme_cls.primary_color
-									text: "Current Conditions"
 									halign: "left"
+									text: "Current Conditions"
 
 								MyMDLabel:
 									id: current_datetime
 									md_bg_color: app.theme_cls.primary_color
-									text: app.selected_city.current['DateTime']
 									halign: "right"
 
 								MyMDLabel:
@@ -148,7 +149,6 @@ MDScreen:
 
 								MyMDLabel:
 									id: current_real_feel_temp
-									text: f"{app.selected_city.current['RealFeelTemperature']} \u00B0C"
 																		
 								MyMDLabel:
 									text: "Dew Point"
@@ -157,14 +157,12 @@ MDScreen:
 								MyMDLabel:
 									id: current_dew_point
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.current['DewPoint']} \u00B0C"
 									
 								MyMDLabel:
 									text: "Cloud Cover"
 									
 								MyMDLabel:
 									id: current_cloud_cover
-									text: f"{app.selected_city.current['CloudCover']} %"
 																		
 								MyMDLabel:
 									text: "Humidity"
@@ -173,14 +171,12 @@ MDScreen:
 								MyMDLabel:
 									id: current_relative_humidity
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.current['RelativeHumidity']} %"
 									
 								MyMDLabel:
 									text: "Indoor Humidity"
 									
 								MyMDLabel:
 									id: current_indoor_relative_humidity
-									text: f"{app.selected_city.current['IndoorRelativeHumidity']} %"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -189,14 +185,12 @@ MDScreen:
 								MyMDLabel:
 									id: current_wind
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.current['Wind']} km/hr"
 									
 								MyMDLabel:
 									text: "Wind Gust"
 									
 								MyMDLabel:
 									id: current_wind_gust
-									text: f"{app.selected_city.current['WindGust']} km/hr"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -205,14 +199,12 @@ MDScreen:
 								MyMDLabel:
 									id: current_uv_index
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: app.selected_city.current['UVIndex']
 									
 								MyMDLabel:
 									text: "Visibility"
 									
 								MyMDLabel:
 									id: current_visibility
-									text: f"{app.selected_city.current['Visibility']} km"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -221,20 +213,17 @@ MDScreen:
 								MyMDLabel:
 									id: current_pressure
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.current['Pressure']} mb"
 									
 								MyMDLabel:
 									text: "Precipitation"
 									
 								MyMDLabel:
 									id: current_precipitation
-									text: f"{app.selected_city.current['Precipitation']} mm"
 
 						MDCard:
 							size_hint: (1, None)
 							height: dp(270)
 							elevation: 10
-							radius: 20
 
 							MDGridLayout:
 								cols: 2 if app_screen.width > dp(275) else 1
@@ -250,7 +239,6 @@ MDScreen:
 								MyMDLabel:
 									id: current_date 
 									md_bg_color: app.theme_cls.primary_color
-									text: app.selected_city.current['DateTime'].split()[0]
 									halign: "right"
 									size_hint_y: None
 									height: dp(50)	if app_screen.width > dp(275) else dp(25)			
@@ -260,20 +248,17 @@ MDScreen:
 
 								MyMDLabel:
 									id: sun
-									text: f"Rise:{app.selected_city.current['SunRise']}\nSet:{app.selected_city.current['SunSet']}\n{app.selected_city.current['DateTime'].split()[1][-6:]}"
 
 								AsyncImage:
 									source: "https://developer.accuweather.com/sites/default/files/33-s.png"
 
 								MyMDLabel:
 									id: moon
-									text: f"Rise:{app.selected_city.current['MoonRise']}\nSet:{app.selected_city.current['MoonSet']}\n{app.selected_city.current['DateTime'].split()[1][-6:]}"
 
 						MDCard:
 							size_hint: (1, None)
 							height: dp(400)
 							elevation: 10
-							radius: 20
 
 							MDGridLayout:
 								cols: 1
@@ -292,12 +277,10 @@ MDScreen:
 									MyMDLabel:
 										id: forecast_date
 										md_bg_color: app.theme_cls.primary_color
-										text: app.selected_city.forecast['Date']
 										halign: "right"
 
 								MyMDLabel:		
 									id: forecast_weather_text
-									text: app.selected_city.forecast['WeatherText']
 									md_bg_color: app.theme_cls.primary_light
 									size_hint_y: None
 									height: dp(50)
@@ -312,7 +295,6 @@ MDScreen:
 
 									MyMDLabel:
 										id: forecast_min_temp
-										text: f"{app.selected_city.forecast['MinTemp']} \u00B0C"
 																			
 									MyMDLabel:
 										text: "Maximum Temperature"
@@ -321,14 +303,12 @@ MDScreen:
 									MyMDLabel:
 										id: forecast_max_temp
 										md_bg_color: (209/255, 220/255, 222/255, 1)
-										text: f"{app.selected_city.forecast['MaxTemp']} \u00B0C"
 										
 									MyMDLabel:
 										text: "Minimum Real Feel"
 										
 									MyMDLabel:
 										id: forecast_min_real_feel
-										text: f"{app.selected_city.forecast['MinRealFeel']} \u00B0C"
 										
 									MyMDLabel:
 										md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -337,14 +317,12 @@ MDScreen:
 									MyMDLabel:
 										id: forecast_max_real_feel
 										md_bg_color: (209/255, 220/255, 222/255, 1)
-										text: f"{app.selected_city.forecast['MaxRealFeel']} \u00B0C"
 																				
 									MyMDLabel:
 										text: "Hours of Sun"
 										
 									MyMDLabel:
 										id: forecast_hrs_of_sun
-										text: app.selected_city.forecast['HrsOfSun']
 
 									MyMDLabel:
 										md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -353,20 +331,17 @@ MDScreen:
 									MyMDLabel:
 										id: forecast_air_quality
 										md_bg_color: (209/255, 220/255, 222/255, 1)
-										text: app.selected_city.forecast['AirQuality']
 
 									MyMDLabel:
 										text: "UV Index"
 										
 									MyMDLabel:
 										id: forecast_uv_index
-										text: app.selected_city.forecast['UVIndex']
 
 						MDCard:
 							size_hint: (1, None)
 							height: dp(500)
 							elevation: 10
-							radius: 20
 
 							MDGridLayout:
 								cols: 2 if app_screen.width > dp(275) else 1
@@ -380,16 +355,13 @@ MDScreen:
 								MyMDLabel:
 									id: day_forecast_date
 									md_bg_color: app.theme_cls.primary_color
-									text: app.selected_city.forecast['Date']
 									halign: "right"
 
 								AsyncImage:
 									id: day_forecast_icon
-									source: f"https://developer.accuweather.com/sites/default/files/{app.selected_city.day_forecast['Icon']}-s.png"
 
 								MyMDLabel:
 									id: day_forecast_text
-									text: app.selected_city.day_forecast['Text']
 
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -398,14 +370,12 @@ MDScreen:
 								MyMDLabel:
 									id: day_forecast_precp_prob
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.day_forecast['PrecpProb']} %"
 																		
 								MyMDLabel:
 									text: "Thunderstorm Probability"
 									
 								MyMDLabel:
 									id: day_forecast_thunder_prob
-									text: f"{app.selected_city.day_forecast['ThunderProb']} %"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -414,14 +384,12 @@ MDScreen:
 								MyMDLabel:
 									id: day_forecast_rain_prob
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.day_forecast['RainProb']} %"
 									
 								MyMDLabel:
 									text: "Snow Probability"
 									
 								MyMDLabel:
 									id: day_forecast_snow_prob
-									text: f"{app.selected_city.day_forecast['SnowProb']} %"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -430,14 +398,12 @@ MDScreen:
 								MyMDLabel:
 									id: day_forecast_ice_prob
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.day_forecast['IceProb']} %"
 
 								MyMDLabel:
 									text: "Cloud Cover"
 									
 								MyMDLabel:
 									id: day_forecast_cloud_cover
-									text: f"{app.selected_city.day_forecast['CloudCover']} %"
 
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -446,20 +412,17 @@ MDScreen:
 								MyMDLabel:
 									id: day_forecast_wind
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.day_forecast['Wind']} km/hr"
 									
 								MyMDLabel:
 									text: "Wind Gust"
 									
 								MyMDLabel:
 									id: day_forecast_wind_gust
-									text: f"{app.selected_city.day_forecast['WindGust']} km/hr"
 								
 						MDCard:
 							size_hint: (1, None)
 							height: dp(500)
 							elevation: 10
-							radius: 20
 
 							MDGridLayout:
 								cols: 2 if app_screen.width > dp(275) else 1
@@ -473,16 +436,13 @@ MDScreen:
 								MyMDLabel:
 									id: night_forecast_date
 									md_bg_color: app.theme_cls.primary_color
-									text: app.selected_city.forecast['Date']
 									halign: "right"
 
 								AsyncImage:
 									id: night_forecast_icon
-									source: "https://developer.accuweather.com/sites/default/files/{app.selected_city.night_forecast['Icon']}-s.png"
 
 								MyMDLabel:
 									id: night_forecast_text
-									text: app.selected_city.night_forecast['Text']
 
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -491,14 +451,12 @@ MDScreen:
 								MyMDLabel:
 									id: night_forecast_precp_prob
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.night_forecast['PrecpProb']} %"
 																		
 								MyMDLabel:
 									text: "Thunderstorm Probability"
 									
 								MyMDLabel:
 									id: night_forecast_thunder_prob
-									text: f"{app.selected_city.night_forecast['ThunderProb']} %"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -507,14 +465,12 @@ MDScreen:
 								MyMDLabel:
 									id: night_forecast_rain_prob
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.night_forecast['RainProb']} %"
 									
 								MyMDLabel:
 									text: "Snow Probability"
 									
 								MyMDLabel:
 									id: night_forecast_snow_prob
-									text: f"{app.selected_city.night_forecast['SnowProb']} %"
 									
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -523,14 +479,12 @@ MDScreen:
 								MyMDLabel:
 									id: night_forecast_ice_prob
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.night_forecast['IceProb']} %"
 
 								MyMDLabel:
 									text: "Cloud Cover"
 									
 								MyMDLabel:
 									id: night_forecast_cloud_cover
-									text: f"{app.selected_city.night_forecast['CloudCover']} %"
 
 								MyMDLabel:
 									md_bg_color: (209/255, 220/255, 222/255, 1)
@@ -539,24 +493,119 @@ MDScreen:
 								MyMDLabel:
 									id: night_forecast_wind
 									md_bg_color: (209/255, 220/255, 222/255, 1)
-									text: f"{app.selected_city.night_forecast['Wind']} km/hr"
 									
 								MyMDLabel:
 									text: "Wind Gust"
 									
 								MyMDLabel:
 									id: night_forecast_wind_gust
-									text: f"{app.selected_city.night_forecast['WindGust']} km/hr"
-
-
-
-
-
-
-
-
 
 		MDNavigationDrawer:
 			id: nav_drawer
 
-		
+			MDGridLayout:
+				cols: 1
+
+				MyImage:
+					size_hint: (1, None)
+					height: dp(200)
+					source: "assets/icon.png"
+
+				ScrollView:
+					size: root.size
+					do_scroll_x: False
+					do_scroll_y: True
+
+					GridLayout:
+						size_hint: (1, None)
+						height: self.minimum_height
+						cols: 1
+
+						MyMDLabel:
+							markup: True
+							text: "[b]Version[/b]"
+							adaptive_height: True
+
+						MDLabel:
+							text: "1.0.0"
+							padding: (20, 5)
+							adaptive_height: True
+
+						MyMDLabel:
+							markup: True
+							text: "[b]Theme[/b]"
+							adaptive_height: True
+
+						MDFlatButton:
+							text: "Dark Theme"
+							on_release: app.change_theme(self)
+
+						MyMDLabel:
+							markup: True
+							text: "[b]App Colour[/b]"
+							adaptive_height: True
+
+						MDGridLayout:
+							cols: 2
+							size_hint: (1, None)
+							adaptive_height: True
+
+							MDFlatButton:
+								text: "Red"
+								on_release: app.change_color(self)				
+
+							MDFlatButton:
+								text: "Pink"
+								on_release: app.change_color(self)	
+
+							MDFlatButton:
+								text: "Purple"
+								on_release: app.change_color(self)	
+
+							MDFlatButton:
+								text: "Indigo"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Blue"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Teal"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Green"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Lime"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Yellow"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Amber"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Orange"
+								on_release: app.change_color(self)
+
+							MDFlatButton:
+								text: "Brown"
+								on_release: app.change_color(self)
+
+						MyMDLabel:
+							markup: True
+							text: "[b]Credits[/b]"
+							adaptive_height: True
+
+						MDFlatButton:
+							text: "About Developer"
+							on_release: app.about_developer()
+
+
+
